@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    
+
     <meta charset="UTF-8">
     <title>Sistema Solar</title>
     <link rel="stylesheet" type="text/css" href="css/global.css"></link>
     <script src="js2/trails.js"></script>   
-    <script src="js/jquery.min.js"></script>    
-    <script src="js/gl-matrix-3.3.0.min.js"></script>    
-    <script src="js/three.js"></script>    
-    <script src="js/loaders/ColladaLoader.js"></script>  
-    <script src="js/controls/OrbitControls.js"></script>  
+    <script src="js/jquery.min.js"></script>
+    <script src="js/gl-matrix-3.3.0.min.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/loaders/ColladaLoader.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
 
     <style>
         #display{
@@ -21,7 +21,7 @@
             background: rgba(0,0,0,0.5);
             border: 1px solid #999999;
             color:#999999;
-            
+
 
         }
     </style>
@@ -33,14 +33,14 @@
     </div>
 
     <script type="text/javascript">
-  
+
         var mat4=glMatrix.mat4;
         var vec3=glMatrix.vec4;
 
-        var $window=$(window);    
+        var $window=$(window);
         var $container = $('#container3D');
 
-        var renderer,camera,scene,controls;   
+        var renderer,camera,scene,controls;
 
         var sol,tierra,luna,iss,apollo;
         var tiempo=0;
@@ -51,9 +51,9 @@
         var modelos={
             "sol.dae":null,
             "apollo.dae":null,
-            "iss.dae":null,                
-            "tierra.dae":null,  
-            "luna.dae":null,  
+            "iss.dae":null,
+            "tierra.dae":null,
+            "luna.dae":null,
         }
 
         var texturas={
@@ -69,10 +69,10 @@
 
         var cameraTargets=[
             "sol.dae",
-            "tierra.dae",            
+            "tierra.dae",
             "luna.dae",
             "iss.dae",
-            "apollo.dae",            
+            "apollo.dae",
         ]
         var lastRelCameraPositions=[null,null,null,null,null];
 
@@ -87,7 +87,7 @@
             // configuración básica de Three.js
             renderer = new THREE.WebGLRenderer({antialias:true});
             renderer.setSize($window.width()-5, $window.height()-5);
-            
+
             var aspect=$window.width()/$window.height();
 
             camera=new THREE.PerspectiveCamera(45,aspect,0.1,100000);
@@ -115,7 +115,7 @@
             var axesHelper = new THREE.AxesHelper( 8 );
             scene.add( axesHelper );
 
-            
+
 
             trail3=new Trail(1000,new THREE.Vector3(0,0,0),0.15);
             trail2=new Trail(1000,new THREE.Vector3(0,0,0),0.45);
@@ -142,7 +142,7 @@
             };
 
             manager.onError = function ( url ) {
-                console.log( 'Hubo un error al cargar ' + url );                
+                console.log( 'Hubo un error al cargar ' + url );
             };
 
             var filenames=Object.keys(texturas);
@@ -150,7 +150,7 @@
             for (var i = 0; i < filenames.length; i++) {
                 var loader = new THREE.TextureLoader(manager);
                 loader.load('maps/'+filenames[i],onTextureLoaded.bind(this,filenames[i]));
-            }       
+            }
 
         }
 
@@ -167,43 +167,43 @@
                     color: 0xFFFFFF,
                     specular: 0xFFFFFF,
                     shininess: 2,
-                    emissive:0x222222,                
+                    emissive:0x222222,
                     map: texturas["earth2.jpg"],
-                    
+
                 }),
                 "sol": new THREE.MeshPhongMaterial({
-                    color: 0xFFFFFF,            
-                    shininess: 1,                
+                    color: 0xFFFFFF,
+                    shininess: 1,
                     map: texturas["sun.jpg"],
-                    lightMap: texturas["sun.jpg"],                   
-                    
+                    lightMap: texturas["sun.jpg"],
+
                 }),
                 "luna": new THREE.MeshPhongMaterial({
-                    color: 0xAAAAAA,                
+                    color: 0xAAAAAA,
                     emissive:0x222222,
-                    shininess: 2,                
+                    shininess: 2,
                     map: texturas["moon2.jpg"],
-                    
+
                 }),
                 "apollo":new THREE.MeshPhongMaterial({
                     color: 0x666666,
-                    specular: 0x993300,  
-                    emissive:0x993300,		
+                    specular: 0x993300,
+                    emissive:0x993300,
                     shininess: 64,
-                    //envMap:texturas["refmap1b.jpg"],                
+                    //envMap:texturas["refmap1b.jpg"],
                     side: THREE.DoubleSide
                 }),
                 "iss":new THREE.MeshPhongMaterial({
                     color: 0x666666,
-                    specular: 0x999999,  
-                    emissive:0x333333,		
+                    specular: 0x999999,
+                    emissive:0x333333,
                     shininess: 64,
-                    //envMap:texturas["refmap1b.jpg"],                
+                    //envMap:texturas["refmap1b.jpg"],
                     side: THREE.DoubleSide
-                })                        
+                })
             };
 
-         
+
 
             var manager = new THREE.LoadingManager();
 
@@ -222,7 +222,7 @@
 
             manager.onError = function ( url ) {
                 console.log( 'Hubo un error al cargar ' + url );
-                
+
             };
 
             var filenames=Object.keys(modelos);
@@ -230,19 +230,19 @@
             for (var i = 0; i < filenames.length; i++) {
                 var loader = new THREE.ColladaLoader(manager);
                 loader.load('modelos/'+filenames[i],onModelLoaded.bind(this,filenames[i]));
-            }       
+            }
 
         }
 
         function onModelLoaded(filename,collada){
-            //console.log(collada.scene.children[0]);                  
+            //console.log(collada.scene.children[0]);
             modelos[filename]=collada.scene.children[0];
             modelos[filename].rotation.set(0,0,0);
             modelos[filename].position.set(0,0,0);
 
             var escala=3;
             switch(filename){
-                
+
                 case "tierra.dae": escala=15;break;
                 case "luna.dae": escala=7;break;
             }
@@ -254,7 +254,7 @@
 
             // guardo la posicion relativa de la camara al target
             var camPos=camera.position.clone();
-            var targetPos=modelos[cameraTargets[currentCameraTarget]].localToWorld(new THREE.Vector3(0,0,0));    
+            var targetPos=modelos[cameraTargets[currentCameraTarget]].localToWorld(new THREE.Vector3(0,0,0));
             var relCamPos=camPos.clone();
             relCamPos.sub(targetPos);
             lastRelCameraPositions[currentCameraTarget]=relCamPos;
@@ -267,24 +267,24 @@
             else currentCameraTarget=0;
 
             if (lastRelCameraPositions[currentCameraTarget]!=null) {
-                var targetPos=modelos[cameraTargets[currentCameraTarget]].localToWorld(new THREE.Vector3(0,0,0));  
-                var p=lastRelCameraPositions[currentCameraTarget].clone();                
-                
+                var targetPos=modelos[cameraTargets[currentCameraTarget]].localToWorld(new THREE.Vector3(0,0,0));
+                var p=lastRelCameraPositions[currentCameraTarget].clone();
+
                 console.log("posicion relativa recuperada del "+currentCameraTarget+": ");
                 console.log(p);
 
                 p.add(targetPos);
-                camera.position.copy(p);   
+                camera.position.copy(p);
                 controls.target.copy(targetPos);
-            }           
-            
+            }
+
             lastTargetPos=null;
         }
 
         function onResize(){
 
             renderer.setSize($window.width()-5, $window.height()-5);
-                    
+
             camera.aspect=$window.width()/$window.height();
             camera.updateProjectionMatrix();
         }
@@ -296,7 +296,7 @@
 
             trailTierra.visible=trailsVisibles;
             trailLuna.visible=trailsVisibles;
-            trailIss.visible=trailsVisibles;           
+            trailIss.visible=trailsVisibles;
 
         }
 
@@ -321,8 +321,8 @@
                     resetTrails();
                 }
 
-            }); 
-            
+            });
+
             controls.update();
 /*
             sol = new THREE.Mesh(new THREE.SphereGeometry( 15, 32, 32 ), materiales["sol"] );
@@ -330,7 +330,7 @@
             sol = modelos["sol.dae"];
             sol.material=materiales["sol"]
 
-            scene.add( sol );            
+            scene.add( sol );
 
             tierra = modelos["tierra.dae"];
             tierra.material=materiales["tierra"]
@@ -340,19 +340,19 @@
             iss = modelos["iss.dae"];
             iss.material=materiales["iss"]
             iss.position.x=90;
-            scene.add(iss);              
+            scene.add(iss);
 
             luna = modelos["luna.dae"];
             luna.material=materiales["luna"]
             luna.position.x=130;
-            scene.add(luna);            
+            scene.add(luna);
 
             apollo = modelos["apollo.dae"];
             apollo.material=materiales["apollo"]
             apollo.position.x=135;
-            scene.add(apollo);   
+            scene.add(apollo);
 
-            
+
             render();
         }
 
@@ -360,7 +360,7 @@
         var frame=0;
 
         function actualizarEscena(){
-            
+
              /* *********************************************************************************
 
             Ejes de coordenadas y escalas
@@ -371,18 +371,18 @@
 
             Consigna
             ---------
-		
-            Definir las matrices de transformacion de la Tierra, la Luna, la Estacion Espacial (ISS) y la nave Apollo, 
+
+            Definir las matrices de transformacion de la Tierra, la Luna, la Estacion Espacial (ISS) y la nave Apollo,
             para recrear los  movimientos reales de cada cuerpo.
 
             Condiciones a cumplir:
             ---------------------
 
-            1) NO ESTA PERMITIDO el uso de funciones trigonometricas (seno y coseno) para el cálculo de las orbitas, 
+            1) NO ESTA PERMITIDO el uso de funciones trigonometricas (seno y coseno) para el cálculo de las orbitas,
                deben usar matrices de rotación y traslación para resolverlo
 
 		    2) La tierra rota alrededor del sol sobre el plano XZ (ciclo anual)
-            3) La tierra tiene su eje inclinado de 23 grados respecto del eje +Y (arriba). 
+            3) La tierra tiene su eje inclinado de 23 grados respecto del eje +Y (arriba).
             4) La tierra rota sobre su eje (ciclo del día)
 
             IMPORTANTE: tener en cuenta la relación de la inclinacion de 23 grados, con las estaciones del año
@@ -394,7 +394,7 @@
 
             La variable tiempo, son los segundos desde que arranco la aplicación
 
-            
+
             EDITAR EL CODIGO A CONTINUACION
 
             *********************************************************************************
@@ -416,14 +416,14 @@
             // ciclo anual
             mat4.rotate(mCicloAnualTierra,mCicloAnualTierra,2*Math.PI*frame/FRAME_PER_YEAR,[0,1,0]);
             // // distancia al sol
-            mat4.translate(mCicloAnualTierra,mCicloAnualTierra,[DISTANCE_EARTH_FROM_SUN,0,0]); 
+            mat4.translate(mCicloAnualTierra,mCicloAnualTierra,[DISTANCE_EARTH_FROM_SUN,0,0]);
             // eje inclinado 23° respetando estaciones del año
-            mat4.rotate(mTierra,mCicloAnualTierra,-2*Math.PI*frame/FRAME_PER_YEAR,[0,1,0]); 
-            mat4.rotate(mTierra,mTierra,23*Math.PI/180,[0,0,-1]); 
+            mat4.rotate(mTierra,mCicloAnualTierra,-2*Math.PI*frame/FRAME_PER_YEAR,[0,1,0]);
+            mat4.rotate(mTierra,mTierra,23*Math.PI/180,[0,0,-1]);
             // ciclo del día
             mat4.rotate(mTierra,mTierra,2*Math.PI*frame/FRAME_PER_DAYS,[0,1,0]);
             setTransform(tierra,mTierra);
-  
+
             // luna
             mLuna=mat4.create();
             // ciclo de la luna (30 días)
@@ -436,7 +436,7 @@
             // apollo
             m3=mat4.create();
             // distancia a la luna
-            mat4.translate(m3,mLuna,[DISTANCE_APOLLO_FROM_MOON,0,0]); 
+            mat4.translate(m3,mLuna,[DISTANCE_APOLLO_FROM_MOON,0,0]);
             setTransform(apollo,m3);
 
             // iss
@@ -444,8 +444,8 @@
             // orbita respecto a la tierra
             mat4.rotate(m4,mCicloAnualTierra,frame/FRAME_PER_DAYS,[0,0,1]);
             // distancia a la tierra
-            mat4.translate(m4,m4,[DISTANCE_ISS_FROM_EARTH,0,0]);           
-            setTransform(iss,m4);  
+            mat4.translate(m4,m4,[DISTANCE_ISS_FROM_EARTH,0,0]);
+            setTransform(iss,m4);
 
 
             // *********************************************************************************************
@@ -483,9 +483,9 @@
 
 
 
-        function updateCameras(){                    
-                
-                var tg=modelos[cameraTargets[currentCameraTarget]].localToWorld(new THREE.Vector3(0,0,0)); 
+        function updateCameras(){
+
+                var tg=modelos[cameraTargets[currentCameraTarget]].localToWorld(new THREE.Vector3(0,0,0));
                 controls.target.copy(tg);
                 //console.log(t);
                 controls.update();
@@ -508,13 +508,13 @@
             actualizarEscena();
 
             tiempo+=0.1*speed*1/60;
-            renderer.render(scene, camera,false,false);   
+            renderer.render(scene, camera,false,false);
             $("#display").html("speed:"+speed.toFixed(2)+"<br>camera target: "+cameraTargets[currentCameraTarget]+"<br>days: "+(frame/FRAME_PER_DAYS).toFixed(0));
 
         }
 
         start();
-        loadTextures();    
+        loadTextures();
 
     </script>
 
