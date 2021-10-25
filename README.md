@@ -11,3 +11,7 @@ https://66-71-sistemas-graficos.github.io/demoGrillaNxM/index.html?forma=plano
 https://66-71-sistemas-graficos.github.io/demoGrillaNxM/index.html?forma=esfera
 
 https://66-71-sistemas-graficos.github.io/demoGrillaNxM/index.html?forma=tubo
+
+Ejercicio semana 5: MapeoUV
+
+https://66-71-sistemas-graficos.github.io/demoMapeoUV/index.html
